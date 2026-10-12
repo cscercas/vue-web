@@ -51,6 +51,18 @@ body {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Brand colors */
+  --color-simpsons-yellow: #ffde00;
+  --color-simpsons-red: #ee3133;
+  --color-domus-cyan: #18bcf6;
+  --color-domus-navy: #151934;
+  --color-domus-navy-input: #1f233e;
+  --color-brand-purple: #6a5acd;
+  --color-brand-purple-dark: #584bab;
+
+  /* Layout */
+  --container-page: 1400px;
 }
 
 :root {
