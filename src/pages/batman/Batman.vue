@@ -9,12 +9,19 @@ import {
 } from '@/components/ui/navigation-menu'
 import CarrusImaginum from '@/components/CarrusImaginum.vue';
 import { scrollToSection } from '@/utils/scrollToSection';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Toggle } from '@/components/ui/toggle'
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
+interface Coordinatas {
+  x: number
+  y: number
+}
+
 const videreMenu = ref<boolean>(true);
+
+const mousePositione = ref<Coordinatas>({ x: 0, y: 0 });
 
 const handleResize = () => {
   if (window.innerWidth < 640) {
@@ -27,7 +34,34 @@ const handleResize = () => {
 onMounted(() => {
   handleResize();
   window.addEventListener('resize', handleResize);
-});
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+})
+
+const cumMouseMove = (e: MouseEvent) => {
+  
+  const rect = (e.target as HTMLElement).getBoundingClientRect();
+
+  const centerX = rect.left + rect.width / 2
+  const centerY = rect.top + rect.height / 2
+
+  const mouseX = e.clientX - rect.left
+  const mouseY = e.clientY - rect.top
+
+  mousePositione.value = {
+    x: (centerX - mouseX) * 0.1,
+    y: (centerY - mouseY) * 0.1
+  }
+}
+
+const cumMouseLeave = () => {
+  mousePositione.value = { 
+    x: 0, 
+    y: 0 
+  };
+}
 
 </script>
 
@@ -85,11 +119,23 @@ onMounted(() => {
   </NavigationMenu>
  </nav>
 
-<header class="titulus">
-<h1>Batman</h1>
-<div id="titulus_batman" class="titulus-img"></div>
-<p>Él puede tomar la decisión que nadie más puede, la decisión correcta</p>
-</header>
+  <header class="titulus">
+    <h1>Batman</h1>
+
+      <div 
+        id="titulus_batman" 
+        class="titulus-img"
+        @mousemove="cumMouseMove"
+        @mouseleave="cumMouseLeave"
+        :style="{
+          backgroundPositionX: `calc(50% + ${mousePositione.x}px)`,
+          backgroundPositionY: `calc(50% + ${mousePositione.y}px)`,
+          transition: 'background-position 0.1s ease-out'
+        }"
+      ></div>
+
+    <p>Él puede tomar la decisión que nadie más puede, la decisión correcta</p>
+  </header>
 
 <section id="vehiculis">
   <div class="vehiculis-arca">
@@ -176,7 +222,7 @@ background-color:slateblue;
   background-size: 100% 100%;
   background-position: center center;
   background-image: url("../imagines/batman/batman.jpg");
-  min-height: 100vh;
+  aspect-ratio: 8/7;
 }
 
 .titulus-img:hover {
@@ -185,7 +231,7 @@ background-color:slateblue;
 
 .titulus > h1 {
   position: absolute;
-  top: 63%;
+  top: calc(100vw * 0.5);
   width: 100%;
   text-align: center;
   font-size: 5rem; 
@@ -196,7 +242,7 @@ background-color:slateblue;
 
 .titulus > p {
   position: absolute;
-  top: 36%;
+  top: calc(100vw * 0.25);
   width: 100%;
   text-align: center;
   font-size: 2rem;
