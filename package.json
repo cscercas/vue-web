@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@iconify/vue": "^5.0.5",
-    "@lucide/vue": "^1.71.0",
+    "@lucide/vue": "^1.72.0",
     "@tailwindcss/vite": "^4.3.3",
     "@vueuse/core": "^15.0.0",
     "class-variance-authority": "^0.7.1",
